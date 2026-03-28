@@ -44,7 +44,7 @@ public class RentRoomHandler(
         if(!paymentValidation.Result)
             return paymentValidation.Message;
 
-        var rentalData = $"{request.User} - ${request.Room} - ${rentalValue}";
+        var rentalData = $"{request.User} - {request.Room} - R${rentalValue}";
         await roomRentalRepository.SaveRental(rentalData);
         await emailService.SendEmail();
         await reciepeService.PrintReciepe(rentalData);

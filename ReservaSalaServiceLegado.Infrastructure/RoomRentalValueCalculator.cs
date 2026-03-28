@@ -17,13 +17,13 @@ public class RoomRentalValueCalculator : IRoomRentalValueCalculator
         roomFeature switch
         {
             RoomFeatureEnum.Projector => 20,
-            _ => throw new NotImplementedException($"Room feature {roomFeature} not implemented")
+            _ => 0
         };
 
     private decimal GetRoomTypeValue(RoomTypeEnum roomType) =>
         roomType switch
         {
             RoomTypeEnum.Lab => 30,
-            _ => throw new NotImplementedException($"Room type {roomType} not implemented")
+            _ => 0
         };
 }
