@@ -1,41 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Mvc;
+using ReservaSalaServiceLegado.Core.Repository;
+using ReservaSalaServiceLegado.Core.Service;
+using ReservaSalaServiceLegado.Core.UseCases.RentRoom;
+using ReservaSalaServiceLegado.Infrastructure;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<RentRoomHandler>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPaymentValidatorService, PaymentValidatorService>();
+builder.Services.AddScoped<IReciepeService, ReciepeService>();
+builder.Services.AddScoped<IRoomRentalInformationValidator, RoomRentalInformationValidator>();
+builder.Services.AddScoped<IRoomRentalValueCalculator, RoomRentalValueCalculator>();
+builder.Services.AddSingleton<IRoomRentalRepository, RoomRentalRepository>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+app.MapPost("/rent-room", async ([FromServices] RentRoomHandler handler, [FromBody] RentRoomRequest request) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var message = await handler.Handle(request);
+    return Results.Json(new {Message = message});
 })
-.WithName("GetWeatherForecast");
+.WithName("RentRoom");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
