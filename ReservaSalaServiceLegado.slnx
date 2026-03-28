@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ReservaSalaServiceLegado.Core/ReservaSalaServiceLegado.Core.csproj" />
+  <Project Path="ReservaSalaServiceLegado.Web/ReservaSalaServiceLegado.Web.csproj" />
+</Solution>
