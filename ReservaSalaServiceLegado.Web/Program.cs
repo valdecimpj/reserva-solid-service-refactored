@@ -52,6 +52,11 @@ app.MapPost(
         {
             var response = await handler.Handle(request);
 
+            if (response.Message.ToLower().Contains("invalid"))
+                return Results.BadRequest(
+                    new { Response = response, Logs = eventLoggingService.GetLoggedEvents() }
+                );
+
             return Results.Json(
                 new { Response = response, Logs = eventLoggingService.GetLoggedEvents() }
             );

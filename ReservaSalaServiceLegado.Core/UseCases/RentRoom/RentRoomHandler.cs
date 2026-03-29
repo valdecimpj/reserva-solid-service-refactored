@@ -46,6 +46,7 @@ public class RentRoomHandler(
         var paymentValidation = await paymentValidatorService.ValidatePaymentMethod(
             request.paymentMethod
         );
+
         await eventLoggingService.LogEvent(paymentValidation.Message);
 
         if (!paymentValidation.Result)
