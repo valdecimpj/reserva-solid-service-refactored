@@ -49,7 +49,7 @@ public class RentRoomHandler(
 
         await eventLoggingService.LogEvent(paymentValidation.Message);
 
-        if (!paymentValidation.Result)
+        if (paymentValidation.Result is false)
             return new RentRoomResponse(false, paymentValidation.Message, null);
 
         var rentalData = $"{request.User} - {request.Room} - R${rentalValue}";
