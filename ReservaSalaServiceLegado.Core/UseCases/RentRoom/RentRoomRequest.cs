@@ -5,6 +5,6 @@ public record RentRoomRequest(
     string Room,
     RoomTypeEnum RoomType,
     int Hours,
-    IList<RoomFeatureEnum> roomFeatures,
-    string paymentMethod
+    IList<RoomFeatureEnum> RoomFeatures,
+    string PaymentMethod
 );

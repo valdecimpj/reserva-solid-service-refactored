@@ -42,11 +42,11 @@ public class RentRoomHandler(
         var rentalValue = await roomRentalValueCalculatorService.CalculateValue(
             request.Hours,
             request.RoomType,
-            request.roomFeatures
+            request.RoomFeatures
         );
 
         var paymentValidation = await paymentValidatorService.ValidatePaymentMethod(
-            request.paymentMethod
+            request.PaymentMethod
         );
 
         await eventLoggingService.LogEvent(paymentValidation.Message);
