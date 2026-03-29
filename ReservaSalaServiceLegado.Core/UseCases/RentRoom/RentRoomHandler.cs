@@ -10,17 +10,22 @@ public class RentRoomHandler(
     IPaymentValidatorService paymentValidatorService,
     IRoomRentalRepository roomRentalRepository,
     IEmailService emailService,
-    IReciepeService reciepeService
+    IReciepeService reciepeService,
+    IEventLoggingService eventLoggingService
 )
 {
-    public async Task<string> Handle(RentRoomRequest request)
+    public async Task<RentRoomResponse> Handle(RentRoomRequest request)
     {
-        var validation = await roomRentalInformationValidator.Validate(request.User, request.Room, request.Hours);
+        var validation = await roomRentalInformationValidator.Validate(
+            request.User,
+            request.Room,
+            request.Hours
+        );
 
-        if(validation.Result is false)
+        if (validation.Result is false)
         {
-            Console.WriteLine(validation.Error);
-            return validation.Error!;
+            await eventLoggingService.LogEvent(validation.Error!);
+            return new RentRoomResponse(false, validation.Error!, null);
         }
 
         var roomIsRented = await roomRentalRepository.RoomIsRented(request.Room);
@@ -28,8 +33,8 @@ public class RentRoomHandler(
         if (roomIsRented)
         {
             var error = "Room is already reserved.";
-            Console.WriteLine(error);
-            return error;
+            await eventLoggingService.LogEvent(error);
+            return new RentRoomResponse(false, error, null);
         }
 
         var rentalValue = await roomRentalValueCalculator.CalculateValue(
@@ -38,17 +43,19 @@ public class RentRoomHandler(
             [RoomFeatureEnum.Projector]
         );
 
-        var paymentValidation = await paymentValidatorService.ValidatePaymentMethod(request.paymentMethod);
-        Console.WriteLine(paymentValidation.Message);
+        var paymentValidation = await paymentValidatorService.ValidatePaymentMethod(
+            request.paymentMethod
+        );
+        await eventLoggingService.LogEvent(paymentValidation.Message);
 
-        if(!paymentValidation.Result)
-            return paymentValidation.Message;
+        if (!paymentValidation.Result)
+            return new RentRoomResponse(false, paymentValidation.Message, null);
 
         var rentalData = $"{request.User} - {request.Room} - R${rentalValue}";
         await roomRentalRepository.SaveRental(rentalData);
         await emailService.SendEmail();
         await reciepeService.PrintReciepe(rentalData);
-        return "Rented successfully";
+        await eventLoggingService.LogEvent("Rented successfully");
+        return new RentRoomResponse(true, "Rented successfully", rentalData);
     }
-
 }

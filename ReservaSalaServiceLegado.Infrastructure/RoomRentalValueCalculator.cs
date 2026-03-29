@@ -5,7 +5,11 @@ namespace ReservaSalaServiceLegado.Infrastructure;
 
 public class RoomRentalValueCalculator : IRoomRentalValueCalculator
 {
-    public Task<decimal> CalculateValue(int hours, RoomTypeEnum roomType, IList<RoomFeatureEnum> features)
+    public Task<decimal> CalculateValue(
+        int hours,
+        RoomTypeEnum roomType,
+        IList<RoomFeatureEnum> features
+    )
     {
         decimal value = 50 * hours;
         value += GetRoomTypeValue(roomType);
@@ -17,13 +21,13 @@ public class RoomRentalValueCalculator : IRoomRentalValueCalculator
         roomFeature switch
         {
             RoomFeatureEnum.Projector => 20,
-            _ => 0
+            _ => 0,
         };
 
     private decimal GetRoomTypeValue(RoomTypeEnum roomType) =>
         roomType switch
         {
-            RoomTypeEnum.Lab => 30,
-            _ => 0
+            RoomTypeEnum.Laboratory => 30,
+            _ => 0,
         };
 }

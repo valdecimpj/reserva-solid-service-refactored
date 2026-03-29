@@ -2,5 +2,5 @@ namespace ReservaSalaServiceLegado.Core.Enum;
 
 public enum RoomFeatureEnum
 {
-    Projector = 0
+    Projector = 0,
 }

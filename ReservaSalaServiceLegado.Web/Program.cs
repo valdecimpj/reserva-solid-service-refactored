@@ -17,13 +17,15 @@ builder.Services.Configure<JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddScoped<RentRoomHandler>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IPaymentValidatorService, PaymentValidatorService>();
-builder.Services.AddScoped<IReciepeService, ReciepeService>();
-builder.Services.AddScoped<IRoomRentalInformationValidator, RoomRentalInformationValidator>();
-builder.Services.AddScoped<IRoomRentalValueCalculator, RoomRentalValueCalculator>();
+builder.Services.AddTransient<RentRoomHandler>();
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IPaymentValidatorService, PaymentValidatorService>();
+builder.Services.AddTransient<IReciepeService, ReciepeService>();
+builder.Services.AddTransient<IRoomRentalInformationValidator, RoomRentalInformationValidator>();
+builder.Services.AddTransient<IRoomRentalValueCalculator, RoomRentalValueCalculator>();
 builder.Services.AddSingleton<IRoomRentalRepository, RoomRentalRepository>();
+builder.Services.AddScoped<EventLoggingService>();
+builder.Services.AddScoped<IEventLoggingService>(serviceProvider => serviceProvider.GetRequiredService<EventLoggingService>());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,11 +42,21 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapPost("/v1/rent-room", async ([FromServices] RentRoomHandler handler, [FromBody] RentRoomRequest request) =>
-{
-    var message = await handler.Handle(request);
-    return Results.Json(new { Message = message });
-})
-.WithName("RentRoom");
+app.MapPost(
+        "/v1/rent-room",
+        async (
+            [FromServices] RentRoomHandler handler,
+            [FromServices] EventLoggingService eventLoggingService,
+            [FromBody] RentRoomRequest request
+        ) =>
+        {
+            var response = await handler.Handle(request);
+
+            return Results.Json(
+                new { Response = response, Logs = eventLoggingService.GetLoggedEvents() }
+            );
+        }
+    )
+    .WithName("RentRoom");
 
 app.Run();

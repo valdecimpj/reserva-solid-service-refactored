@@ -4,13 +4,14 @@ namespace ReservaSalaServiceLegado.Infrastructure;
 
 public class RoomRentalRepository : IRoomRentalRepository
 {
-    private readonly IList<string> reservedRooms = [];
+    private readonly IList<string> _reservedRooms = [];
 
-    public Task<bool> RoomIsRented(string room) => Task.FromResult(reservedRooms.Any(_ => _.Contains(room)));
+    public Task<bool> RoomIsRented(string room) =>
+        Task.FromResult(_reservedRooms.Any(_ => _.Contains(room)));
 
     public Task SaveRental(string data)
     {
-        reservedRooms.Add(data);
+        _reservedRooms.Add(data);
         return Task.CompletedTask;
     }
 }
