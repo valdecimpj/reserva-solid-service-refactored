@@ -1,3 +1,4 @@
+using ReservaSalaServiceLegado.Core.Model;
 using ReservaSalaServiceLegado.Core.Repository;
 using ReservaSalaServiceLegado.Core.Service;
 using ReservaSalaServiceLegado.Core.Service.RoomRentalInformationValidator;
@@ -53,11 +54,12 @@ public class RentRoomHandler(
         if (paymentValidation.Result is false)
             return new RentRoomResponse(false, paymentValidation.Message, null);
 
-        var rentalData = $"{request.User} - {request.Room} - R${rentalValue}";
+        var rentalData = new RentalDataModel(request.User, request.Room, rentalValue);
         await roomRentalRepository.SaveRental(rentalData);
         await emailService.SendEmail();
         await receiptService.PrintReceipt(rentalData);
-        await eventLoggingService.LogEvent("Rented successfully");
-        return new RentRoomResponse(true, "Rented successfully", rentalData);
+        var successMessage = "Rented successfully";
+        await eventLoggingService.LogEvent(successMessage);
+        return new RentRoomResponse(true, successMessage, rentalData);
     }
 }

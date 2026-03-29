@@ -23,11 +23,23 @@ builder.Services.AddTransient<RentRoomHandler>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IPaymentValidatorService, PaymentValidatorService>();
 builder.Services.AddTransient<IReceiptService, ReceiptService>();
-builder.Services.AddTransient<IRoomRentalInformationValidatorService, RoomRentalInformationValidatorService>();
-builder.Services.AddTransient<IRoomRentalValueCalculatorService, RoomRentalValueCalculatorService>();
+
+builder.Services.AddTransient<
+    IRoomRentalInformationValidatorService,
+    RoomRentalInformationValidatorService
+>();
+
+builder.Services.AddTransient<
+    IRoomRentalValueCalculatorService,
+    RoomRentalValueCalculatorService
+>();
+
 builder.Services.AddSingleton<IRoomRentalRepository, RoomRentalRepository>();
 builder.Services.AddScoped<EventLoggingService>();
-builder.Services.AddScoped<IEventLoggingService>(serviceProvider => serviceProvider.GetRequiredService<EventLoggingService>());
+
+builder.Services.AddScoped<IEventLoggingService>(serviceProvider =>
+    serviceProvider.GetRequiredService<EventLoggingService>()
+);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

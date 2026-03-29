@@ -1,3 +1,4 @@
+using ReservaSalaServiceLegado.Core.Model;
 using ReservaSalaServiceLegado.Core.Repository;
 
 namespace ReservaSalaServiceLegado.Infrastructure;
@@ -9,9 +10,9 @@ public class RoomRentalRepository : IRoomRentalRepository
     public Task<bool> CheckIfRoomIsRented(string room) =>
         Task.FromResult(_reservedRooms.Any(_ => _.Contains(room)));
 
-    public Task SaveRental(string data)
+    public Task SaveRental(RentalDataModel rentalDataModel)
     {
-        _reservedRooms.Add(data);
+        _reservedRooms.Add(rentalDataModel.Data);
         return Task.CompletedTask;
     }
 }
