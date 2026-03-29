@@ -1,6 +1,6 @@
 using ReservaSalaServiceLegado.Core.Service;
 
-namespace ReservaSalaServiceLegado.Infrastructure;
+namespace ReservaSalaServiceLegado.Infrastructure.Service;
 
 public class EmailService(IEventLoggingService eventLoggingService) : IEmailService
 {

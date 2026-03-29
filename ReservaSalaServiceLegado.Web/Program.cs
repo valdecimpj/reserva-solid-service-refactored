@@ -6,6 +6,8 @@ using ReservaSalaServiceLegado.Core.Service.RoomRentalInformationValidator;
 using ReservaSalaServiceLegado.Core.Service.RoomRentalValueCalculator;
 using ReservaSalaServiceLegado.Core.UseCases.RentRoom;
 using ReservaSalaServiceLegado.Infrastructure;
+using ReservaSalaServiceLegado.Infrastructure.Repository;
+using ReservaSalaServiceLegado.Infrastructure.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,7 @@
 using ReservaSalaServiceLegado.Core.Model;
 using ReservaSalaServiceLegado.Core.Repository;
 
-namespace ReservaSalaServiceLegado.Infrastructure;
+namespace ReservaSalaServiceLegado.Infrastructure.Repository;
 
 public class RoomRentalRepository : IRoomRentalRepository
 {

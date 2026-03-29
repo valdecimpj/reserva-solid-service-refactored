@@ -1,7 +1,7 @@
 using ReservaSalaServiceLegado.Core.Model;
 using ReservaSalaServiceLegado.Core.Service;
 
-namespace ReservaSalaServiceLegado.Infrastructure;
+namespace ReservaSalaServiceLegado.Infrastructure.Service;
 
 public class ReceiptService(IEventLoggingService eventLoggingService) : IReceiptService
 {
