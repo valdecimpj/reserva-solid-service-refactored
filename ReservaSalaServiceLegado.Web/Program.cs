@@ -22,7 +22,7 @@ builder.Services.Configure<JsonOptions>(options =>
 builder.Services.AddTransient<RentRoomHandler>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IPaymentValidatorService, PaymentValidatorService>();
-builder.Services.AddTransient<IReciepeService, ReciepeService>();
+builder.Services.AddTransient<IReceiptService, ReceiptService>();
 builder.Services.AddTransient<IRoomRentalInformationValidatorService, RoomRentalInformationValidatorService>();
 builder.Services.AddTransient<IRoomRentalValueCalculatorService, RoomRentalValueCalculatorService>();
 builder.Services.AddSingleton<IRoomRentalRepository, RoomRentalRepository>();
