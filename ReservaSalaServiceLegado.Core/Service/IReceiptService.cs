@@ -4,5 +4,5 @@ namespace ReservaSalaServiceLegado.Core.Service;
 
 public interface IReceiptService
 {
-    Task PrintReceipt(RentalDataModel rentalData);
+    Task PrintReceipt(RentalModel rental);
 }

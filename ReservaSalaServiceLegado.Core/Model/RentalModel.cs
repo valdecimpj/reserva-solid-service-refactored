@@ -1,6 +1,6 @@
 namespace ReservaSalaServiceLegado.Core.Model;
 
-public class RentalDataModel(string user, string room, decimal value)
+public class RentalModel(string user, string room, decimal value)
 {
     private string _user { get; set; } = user;
     private string _room { get; set; } = room;

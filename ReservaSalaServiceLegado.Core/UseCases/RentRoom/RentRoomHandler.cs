@@ -54,12 +54,12 @@ public class RentRoomHandler(
         if (paymentValidation.Result is false)
             return new RentRoomResponse(false, paymentValidation.Message, null);
 
-        var rentalData = new RentalDataModel(request.User, request.Room, rentalValue);
-        await roomRentalRepository.SaveRental(rentalData);
+        var rental = new RentalModel(request.User, request.Room, rentalValue);
+        await roomRentalRepository.SaveRental(rental);
         await emailService.SendEmail();
-        await receiptService.PrintReceipt(rentalData);
+        await receiptService.PrintReceipt(rental);
         var successMessage = "Rented successfully";
         await eventLoggingService.LogEvent(successMessage);
-        return new RentRoomResponse(true, successMessage, rentalData);
+        return new RentRoomResponse(true, successMessage, rental);
     }
 }

@@ -5,7 +5,7 @@ namespace ReservaSalaServiceLegado.Infrastructure;
 
 public class ReceiptService(IEventLoggingService eventLoggingService) : IReceiptService
 {
-    public Task PrintReceipt(RentalDataModel _rentalData)
+    public Task PrintReceipt(RentalModel rental)
     {
         eventLoggingService.LogEvent("Receipt printed");
         return Task.CompletedTask;

@@ -10,9 +10,9 @@ public class RoomRentalRepository : IRoomRentalRepository
     public Task<bool> CheckIfRoomIsRented(string room) =>
         Task.FromResult(_reservedRooms.Any(_ => _.Contains(room)));
 
-    public Task SaveRental(RentalDataModel rentalDataModel)
+    public Task SaveRental(RentalModel rental)
     {
-        _reservedRooms.Add(rentalDataModel.Data);
+        _reservedRooms.Add(rental.Data);
         return Task.CompletedTask;
     }
 }

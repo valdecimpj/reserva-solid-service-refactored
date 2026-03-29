@@ -4,6 +4,6 @@ namespace ReservaSalaServiceLegado.Core.Repository;
 
 public interface IRoomRentalRepository
 {
-    Task SaveRental(RentalDataModel rentalDataModel);
+    Task SaveRental(RentalModel rental);
     Task<bool> CheckIfRoomIsRented(string room);
 }
