@@ -28,7 +28,7 @@ public class RentRoomHandler(
             return new RentRoomResponse(false, validation.Error!, null);
         }
 
-        var roomIsRented = await roomRentalRepository.RoomIsRented(request.Room);
+        var roomIsRented = await roomRentalRepository.CheckIfRoomIsRented(request.Room);
 
         if (roomIsRented)
         {
@@ -40,7 +40,7 @@ public class RentRoomHandler(
         var rentalValue = await roomRentalValueCalculator.CalculateValue(
             request.Hours,
             request.RoomType,
-            [RoomFeatureEnum.Projector]
+            request.roomFeatures
         );
 
         var paymentValidation = await paymentValidatorService.ValidatePaymentMethod(
