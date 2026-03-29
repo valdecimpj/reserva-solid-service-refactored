@@ -1,8 +1,8 @@
 using ReservaSalaServiceLegado.Core.Enum;
 
-namespace ReservaSalaServiceLegado.Core.Service;
+namespace ReservaSalaServiceLegado.Core.Service.RoomRentalValueCalculator;
 
-public interface IRoomRentalValueCalculator
+public interface IRoomRentalValueCalculatorService
 {
     Task<decimal> CalculateValue(int hours, RoomTypeEnum roomType, IList<RoomFeatureEnum> features);
 }

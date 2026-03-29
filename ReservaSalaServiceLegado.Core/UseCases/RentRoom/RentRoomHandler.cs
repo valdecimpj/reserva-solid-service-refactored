@@ -1,12 +1,13 @@
-using ReservaSalaServiceLegado.Core.Enum;
 using ReservaSalaServiceLegado.Core.Repository;
 using ReservaSalaServiceLegado.Core.Service;
+using ReservaSalaServiceLegado.Core.Service.RoomRentalInformationValidator;
+using ReservaSalaServiceLegado.Core.Service.RoomRentalValueCalculator;
 
 namespace ReservaSalaServiceLegado.Core.UseCases.RentRoom;
 
 public class RentRoomHandler(
-    IRoomRentalInformationValidator roomRentalInformationValidator,
-    IRoomRentalValueCalculator roomRentalValueCalculator,
+    IRoomRentalInformationValidatorService roomRentalInformationValidatorService,
+    IRoomRentalValueCalculatorService roomRentalValueCalculatorService,
     IPaymentValidatorService paymentValidatorService,
     IRoomRentalRepository roomRentalRepository,
     IEmailService emailService,
@@ -16,16 +17,16 @@ public class RentRoomHandler(
 {
     public async Task<RentRoomResponse> Handle(RentRoomRequest request)
     {
-        var validation = await roomRentalInformationValidator.Validate(
+        var inputDataValidation = await roomRentalInformationValidatorService.Validate(
             request.User,
             request.Room,
             request.Hours
         );
 
-        if (validation.Result is false)
+        if (inputDataValidation.Result is false)
         {
-            await eventLoggingService.LogEvent(validation.Error!);
-            return new RentRoomResponse(false, validation.Error!, null);
+            await eventLoggingService.LogEvent(inputDataValidation.Error!);
+            return new RentRoomResponse(false, inputDataValidation.Error!, null);
         }
 
         var roomIsRented = await roomRentalRepository.CheckIfRoomIsRented(request.Room);
@@ -37,7 +38,7 @@ public class RentRoomHandler(
             return new RentRoomResponse(false, error, null);
         }
 
-        var rentalValue = await roomRentalValueCalculator.CalculateValue(
+        var rentalValue = await roomRentalValueCalculatorService.CalculateValue(
             request.Hours,
             request.RoomType,
             request.roomFeatures

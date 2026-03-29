@@ -1,9 +1,9 @@
 using ReservaSalaServiceLegado.Core.Enum;
-using ReservaSalaServiceLegado.Core.Service;
+using ReservaSalaServiceLegado.Core.Service.RoomRentalValueCalculator;
 
 namespace ReservaSalaServiceLegado.Infrastructure;
 
-public class RoomRentalValueCalculator : IRoomRentalValueCalculator
+public class RoomRentalValueCalculatorService : IRoomRentalValueCalculatorService
 {
     public Task<decimal> CalculateValue(
         int hours,

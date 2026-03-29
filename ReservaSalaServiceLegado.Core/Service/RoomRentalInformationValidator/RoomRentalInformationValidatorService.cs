@@ -1,8 +1,6 @@
-using ReservaSalaServiceLegado.Core.Service;
+namespace ReservaSalaServiceLegado.Core.Service.RoomRentalInformationValidator;
 
-namespace ReservaSalaServiceLegado.Infrastructure;
-
-public class RoomRentalInformationValidator : IRoomRentalInformationValidator
+public class RoomRentalInformationValidatorService : IRoomRentalInformationValidatorService
 {
     public Task<(bool Result, string? Error)> Validate(string user, string room, int hours)
     {
